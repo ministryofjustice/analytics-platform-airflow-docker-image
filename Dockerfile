@@ -17,22 +17,26 @@
 
 FROM python:3.6-slim
 
+ARG AIRFLOW_REPO="apache/incubator-airflow"
+ARG AIRFLOW_COMMIT="702a57ec5a96d159105c4f5ca76ddd2229eb2f44"
+
 # install deps
 RUN apt-get update -y && apt-get install -y \
-        wget \
-        python-dev \
-        build-essential \
-        curl \
-        libssl-dev \
-    && apt-get clean
+    python-dev \
+    build-essential \
+    curl \
+    libssl-dev
 
 
-RUN pip install --upgrade pip
-
-# Since we install vanilla Airflow, we also want to have support for Postgres and Kubernetes
-RUN pip install -U setuptools
+RUN pip install --upgrade pip setuptools
 
 # install airflow
-RUN pip install https://github.com/apache/incubator-airflow/archive/702a57ec5a96d159105c4f5ca76ddd2229eb2f44.zip#egg=apache-airflow[kubernetes,postgres]
+RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres]
+
+RUN apt-get --purge remove -y \
+    build-essential  \
+    libssl-dev \
+    python-dev \
+    && apt-get clean
 
 ENTRYPOINT ["/usr/local/bin/airflow"]
