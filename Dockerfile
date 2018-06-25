@@ -15,28 +15,46 @@
 #  specific language governing permissions and limitations      *
 #  under the License.                                           *
 
-FROM python:3.6-slim
+FROM python:3.6-alpine
 
 ARG AIRFLOW_REPO="apache/incubator-airflow"
 ARG AIRFLOW_COMMIT="702a57ec5a96d159105c4f5ca76ddd2229eb2f44"
 
 # install deps
-RUN apt-get update -y && apt-get install -y \
-    python-dev \
-    build-essential \
-    curl \
-    libssl-dev
+# RUN apt-get update -y && apt-get install -y \
+#     python-dev \
+#     build-essential \
+#     curl \
+#     libssl-dev
 
+RUN apk add --no-cache \
+  --update \
+  bash \
+  curl \
+  libxml2 \
+  postgresql-libs \
+  libxslt
+
+RUN apk add --no-cache \
+    --update \
+    --virtual build-dependencies \
+      python-dev \
+      build-base \
+      libressl-dev \
+      postgresql-dev \
+      libxml2-dev \
+      libxslt-dev
 
 RUN pip install --upgrade pip setuptools
 
 # install airflow
 RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres]
 
-RUN apt-get --purge remove -y \
-    build-essential  \
-    libssl-dev \
-    python-dev \
-    && apt-get clean
+# RUN apt-get --purge remove -y \
+#     build-essential  \
+#     libssl-dev \
+#     python-dev \
+#     && apt-get clean
+RUN apk del build-dependencies
 
 ENTRYPOINT ["/usr/local/bin/airflow"]
