@@ -31,7 +31,7 @@ RUN apt-get update -y && apt-get install -y \
 RUN pip install --upgrade pip setuptools
 
 # install airflow
-RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres]
+RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres] Flask-OAuthlib
 
 RUN apt-get --purge remove -y \
     build-essential  \
