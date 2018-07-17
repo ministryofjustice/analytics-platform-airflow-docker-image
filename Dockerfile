@@ -18,7 +18,7 @@
 FROM python:3.6-slim
 
 ARG AIRFLOW_REPO="apache/incubator-airflow"
-ARG AIRFLOW_COMMIT="702a57ec5a96d159105c4f5ca76ddd2229eb2f44"
+ARG AIRFLOW_COMMIT="2c20ae81f98f4db17416cebaa9a05b4d0a3880cf"
 
 # install deps
 RUN apt-get update -y && apt-get install -y \
@@ -31,7 +31,7 @@ RUN apt-get update -y && apt-get install -y \
 RUN pip install --upgrade pip setuptools
 
 # install airflow
-RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.2
+RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.3
 
 RUN apt-get --purge remove -y \
     build-essential  \
