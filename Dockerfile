@@ -31,7 +31,9 @@ RUN apt-get update -y && apt-get install -y \
 RUN pip install --upgrade pip setuptools
 
 # install airflow
-RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.3
+RUN pip install https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_COMMIT}.zip#egg=apache-airflow[kubernetes,postgres] \
+    fab_oidc==0.0.4 \
+    redis==2.10.6
 
 RUN apt-get --purge remove -y \
     build-essential  \
