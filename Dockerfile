@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations      *
 #  under the License.                                           *
 
-FROM python:3.6-slim
+FROM python:3.7-slim
 
 ARG AIRFLOW_REPO="apache/airflow"
 ARG AIRFLOW_VERSION="1.10.2"
@@ -52,7 +52,7 @@ RUN apt-get install -y nodejs
 # compile Airflow's static assets
 # NOTE: At this stage `compile_assets.sh` is in `www_rbac`
 #       but Airflow and its assets are in `www`.
-ENV PIP_PACKAGES_PATH="/usr/local/lib/python3.6/site-packages"
+ENV PIP_PACKAGES_PATH="/usr/local/lib/python3.7/site-packages"
 RUN cd ${PIP_PACKAGES_PATH} && ${PIP_PACKAGES_PATH}/airflow/www_rbac/compile_assets.sh && rm -rf ${PIP_PACKAGES_PATH}/airflow/www/node_modules
 
 # remove build deps and Node.js PPA
