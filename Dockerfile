@@ -23,7 +23,7 @@ ARG AIRFLOW_SHA="6418cf5cabf830212892fe5b3f02c43efb316e93"
 
 
 # install deps
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get dist-upgrade && apt-get install -y \
     python-dev \
     build-essential \
     libssl-dev \
