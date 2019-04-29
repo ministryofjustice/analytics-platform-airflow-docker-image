@@ -38,7 +38,7 @@ ARG AIRFLOW_FILENAME="${AIRFLOW_VERSION}.zip"
 ARG AIRFLOW_TARBALL_URL="https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_FILENAME}"
 RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     echo "${AIRFLOW_SHA}  ${AIRFLOW_FILENAME}" | shasum --check - && \
-    SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.6 redis==2.10.6 && \
+    SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.8 redis==2.10.6 && \
     rm ${AIRFLOW_FILENAME}
 
 # install Node.js 10 LTS from official Node.js PPA
