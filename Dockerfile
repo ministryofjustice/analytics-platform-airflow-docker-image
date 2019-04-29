@@ -18,12 +18,12 @@
 FROM python:3.7-slim
 
 ARG AIRFLOW_REPO="apache/airflow"
-ARG AIRFLOW_VERSION="1.10.2"
-ARG AIRFLOW_SHA="6418cf5cabf830212892fe5b3f02c43efb316e93"
+ARG AIRFLOW_VERSION="1.10.3"
+ARG AIRFLOW_SHA="25a9f38fed609cefbb1904057270235ebe4d10fd"
 
 
 # install deps
-RUN apt-get update -y && apt-get dist-upgrade && apt-get install -y \
+RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
     python-dev \
     build-essential \
     libssl-dev \
@@ -38,7 +38,7 @@ ARG AIRFLOW_FILENAME="${AIRFLOW_VERSION}.zip"
 ARG AIRFLOW_TARBALL_URL="https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_FILENAME}"
 RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     echo "${AIRFLOW_SHA}  ${AIRFLOW_FILENAME}" | shasum --check - && \
-    SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.6 redis==2.10.6 && \
+    SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.8 redis==2.10.6 && \
     rm ${AIRFLOW_FILENAME}
 
 # install Node.js 10 LTS from official Node.js PPA
