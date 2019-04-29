@@ -18,12 +18,12 @@
 FROM python:3.7-slim
 
 ARG AIRFLOW_REPO="apache/airflow"
-ARG AIRFLOW_VERSION="1.10.2"
-ARG AIRFLOW_SHA="6418cf5cabf830212892fe5b3f02c43efb316e93"
+ARG AIRFLOW_VERSION="1.10.3"
+ARG AIRFLOW_SHA="25a9f38fed609cefbb1904057270235ebe4d10fd"
 
 
 # install deps
-RUN apt-get update -y && apt-get dist-upgrade && apt-get install -y \
+RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
     python-dev \
     build-essential \
     libssl-dev \
