@@ -19,7 +19,7 @@ FROM python:3.7-slim
 
 ARG AIRFLOW_REPO="apache/airflow"
 ARG AIRFLOW_VERSION="1.10.6"
-ARG AIRFLOW_SHA="25a9f38fed609cefbb1904057270235ebe4d10fd"
+ARG AIRFLOW_SHA="be54958a0b0b86abb2bdcdbc140709f38ee70f5e"
 
 
 # install deps
