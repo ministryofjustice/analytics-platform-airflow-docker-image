@@ -41,6 +41,9 @@ RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.8 redis==2.10.6 && \
     rm ${AIRFLOW_FILENAME}
 
+# Install our package of airflow helper functions
+RUN pip install git+git://github.com/moj-analytical-services/mojap-airflow-tools.git@v0.0.1#egg=mojap-airflow-toolsv0.0.1
+
 # install Node.js 10 LTS from official Node.js PPA
 # NOTE: This is required to compile Airflow's static
 #       assets.
