@@ -21,10 +21,6 @@ ARG AIRFLOW_REPO="apache/airflow"
 ARG AIRFLOW_VERSION="1.10.6"
 ARG AIRFLOW_SHA="be54958a0b0b86abb2bdcdbc140709f38ee70f5e"
 
-ARG MOJTOOLS_REPO="moj-analytical-services/mojap-airflow-tools"
-ARG MOJTOOLS_VERSION="v0.0.1"
-ARG MOJTOOLS_SHA="7fab22aef2cac08cf194fc83bb72a65a1b6b2b5f"
-
 # install deps
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
     python-dev \
@@ -44,13 +40,9 @@ RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] fab_oidc==0.0.8 redis==2.10.6 && \
     rm ${AIRFLOW_FILENAME}
 
-# Install mojap-airflow-tools - probably don't need to check sha as it's but better safe than sorry
-ARG MOJTOOLS_FILENAME="${MOJTOOLS_VERSION}.zip"
-ARG MOJTOOLS_TARBALL_URL="https://github.com/${MOJTOOLS_REPO}/archive/${MOJTOOLS_FILENAME}"
-RUN curl -o ${MOJTOOLS_FILENAME} --location ${MOJTOOLS_TARBALL_URL} && \
-    echo "${MOJTOOLS_SHA}  ${MOJTOOLS_FILENAME}" | shasum --check - && \
-    SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${MOJAP_FILENAME}#egg=mojap-airflow-tools && \
-    rm ${MOJTOOLS_FILENAME}
+# Install mojap-airflow-tools
+RUN apt-get -y install git
+RUN pip install git+git://github.com/moj-analytical-services/mojap-airflow-tools.git@v0.0.1#egg=mojap-airflow-toolsv0.0.1
 
 # install Node.js 10 LTS from official Node.js PPA
 # NOTE: This is required to compile Airflow's static
@@ -73,6 +65,7 @@ RUN apt-get --purge remove -y \
     python-dev \
     software-properties-common \
     nodejs \
+    git \
     && apt-get clean && rm /etc/apt/sources.list.d/nodesource.list
 
 ENTRYPOINT ["/usr/local/bin/airflow"]
