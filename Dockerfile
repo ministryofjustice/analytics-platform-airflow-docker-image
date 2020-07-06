@@ -38,12 +38,14 @@ ARG AIRFLOW_TARBALL_URL="https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_FI
 RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     echo "${AIRFLOW_SHA}  ${AIRFLOW_FILENAME}" | shasum --check - && \
     SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] && \
-    Werkzeug==0.16.1 fab_oidc==0.0.8 redis==2.10.6 && \
+    fab_oidc==0.0.8 redis==2.10.6 && \
     rm ${AIRFLOW_FILENAME}
 
 # Install mojap-airflow-tools
 RUN apt-get -y install git
 RUN pip install git+git://github.com/moj-analytical-services/mojap-airflow-tools.git@v0.0.1#egg=mojap-airflow-toolsv0.0.1
+
+RUN pip install Werkzeug==0.16.1
 
 # install Node.js 10 LTS from official Node.js PPA
 # NOTE: This is required to compile Airflow's static
