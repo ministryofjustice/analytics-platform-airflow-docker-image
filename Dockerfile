@@ -60,7 +60,7 @@ RUN apt-get install -y nodejs
 # ENV PYTHON_PIP_SITE_PACKAGES_PATH="/usr/local/lib/python3.7/site-packages"
 # RUN cd ${PYTHON_PIP_SITE_PACKAGES_PATH} && ${PYTHON_PIP_SITE_PACKAGES_PATH}/airflow/www_rbac/compile_assets.sh && rm -rf ${PYTHON_PIP_SITE_PACKAGES_PATH}/airflow/www/node_modules
 
-# # remove build deps and Node.js PPA
+# remove build deps and Node.js PPA
 RUN apt-get --purge remove -y \
     build-essential  \
     libssl-dev \
