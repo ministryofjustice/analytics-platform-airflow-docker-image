@@ -29,7 +29,6 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
     build-essential \
     libssl-dev \
     software-properties-common \
-    nodejs \
     curl
 
 RUN pip install --upgrade pip setuptools
@@ -43,16 +42,28 @@ RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     --constraint https://raw.githubusercontent.com/$AIRFLOW_REPO/$AIRFLOW_VERSION/requirements/requirements-python3.7.txt && \
     rm ${AIRFLOW_FILENAME}
 
-RUN apt-get -y install git
-RUN pip install -r requirements.txt
-
 # install Node.js 10 LTS from official Node.js PPA
 # NOTE: This is required to compile Airflow's static
 #       assets.
 # SEE: This article on how to install node on Debian
 #      https://tecadmin.net/install-latest-nodejs-npm-on-debian/
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    apt-get install nodejs
+
+# Install yarn
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get install yarn
+
+# compile Airflow's static assets
+# NOTE: At this stage `compile_assets.sh` is in `www_rbac`
+#       but Airflow and its assets are in `www`.
+ENV PYTHON_PIP_SITE_PACKAGES_PATH="/usr/local/lib/python3.7/site-packages"
+RUN cd ${PYTHON_PIP_SITE_PACKAGES_PATH} && ${PYTHON_PIP_SITE_PACKAGES_PATH}/airflow/www_rbac/compile_assets.sh && rm -rf ${PYTHON_PIP_SITE_PACKAGES_PATH}/airflow/www/node_modules
+
+# Install additional requirements
+RUN apt-get -y install git
+RUN pip install -r requirements.txt
 
 # remove build deps and Node.js PPA
 RUN apt-get --purge remove -y \
@@ -61,6 +72,7 @@ RUN apt-get --purge remove -y \
     python-dev \
     software-properties-common \
     nodejs \
+    yarn \
     git \
     && apt-get clean && rm /etc/apt/sources.list.d/nodesource.list
 
