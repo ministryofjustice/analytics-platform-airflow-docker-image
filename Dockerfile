@@ -21,6 +21,8 @@ ARG AIRFLOW_REPO="apache/airflow"
 ARG AIRFLOW_VERSION="1.10.10"
 ARG AIRFLOW_SHA="6368f0ac43c599e93a5326d724dcc951d6619d98"
 
+ADD requirements.txt ./
+
 # install deps
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
     python-dev \
@@ -38,13 +40,11 @@ ARG AIRFLOW_TARBALL_URL="https://github.com/${AIRFLOW_REPO}/archive/${AIRFLOW_FI
 RUN curl -o ${AIRFLOW_FILENAME} --location ${AIRFLOW_TARBALL_URL} && \
     echo "${AIRFLOW_SHA}  ${AIRFLOW_FILENAME}" | shasum --check - && \
     SLUGIFY_USES_TEXT_UNIDECODE=yes pip install file:///./${AIRFLOW_FILENAME}#egg=apache-airflow[kubernetes,postgres] \
-    --constraint https://raw.githubusercontent.com/apache/airflow/$AIRFLOW_VERSION/requirements/requirements-python3.7.txt && \
-    fab_oidc==0.0.8 redis==2.10.6 && \
+    --constraint https://raw.githubusercontent.com/$AIRFLOW_REPO/$AIRFLOW_VERSION/requirements/requirements-python3.7.txt && \
     rm ${AIRFLOW_FILENAME}
 
-# Install mojap-airflow-tools
 RUN apt-get -y install git
-RUN pip install git+git://github.com/moj-analytical-services/mojap-airflow-tools.git@v0.0.1#egg=mojap-airflow-toolsv0.0.1
+RUN pip install -r requirements.txt
 
 # install Node.js 10 LTS from official Node.js PPA
 # NOTE: This is required to compile Airflow's static
