@@ -1,0 +1,4 @@
+# Additional requirements
+fab_oidc==0.0.8
+redis==2.10.6
+git+git://github.com/moj-analytical-services/mojap-airflow-tools.git@v0.0.1#egg=mojap-airflow-toolsv0.0.1
