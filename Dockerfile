@@ -21,8 +21,6 @@ ARG AIRFLOW_REPO="apache/airflow"
 ARG AIRFLOW_VERSION="1.10.10"
 ARG AIRFLOW_SHA="6368f0ac43c599e93a5326d724dcc951d6619d98"
 
-ADD requirements.txt ./
-
 # install deps
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
     python-dev \
@@ -63,6 +61,7 @@ RUN cd ${PYTHON_PIP_SITE_PACKAGES_PATH} && ${PYTHON_PIP_SITE_PACKAGES_PATH}/airf
 
 # Install additional requirements
 RUN apt-get -y install git
+ADD requirements.txt ./
 RUN pip install -r requirements.txt
 
 # remove build deps and Node.js PPA
